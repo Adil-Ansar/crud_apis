@@ -4,7 +4,8 @@ const {
     createUser,
     getAllUser,
     getUserDetails,
-    updateUserDetails
+    updateUserDetails,
+    deleteUserDetails
 } = require("./../controller/userHandler");
 const basePath = "/api";
 
@@ -12,6 +13,7 @@ userRoutes.post("/user", createUser);
 userRoutes.get("/user", getAllUser);
 userRoutes.get("/user/:userId", getUserDetails);
 userRoutes.put("/user/:userId", updateUserDetails);
+userRoutes.delete("/user/:userId", deleteUserDetails);
 
 
 module.exports = {

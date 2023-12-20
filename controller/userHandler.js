@@ -166,11 +166,54 @@ const updateUserDetails = async (req, res) => {
     }
 }
 
+// Function to delete user details by ID
+const deleteUserDetails = async (req, res) => {
+    try {
+        // Extract userId from request parameters
+        const { userId } = req.params;
+
+        // Check if userId is not a number
+        if (isNaN(userId)) {
+            return res.status(400).json({
+                meta: { msg: "Invalid userId", status: false },
+            });
+        }
+
+        // Find the index of the user in 'data' array based on the ID
+        const userIndex = data.findIndex(obj => obj.id === Number(userId));
+
+        // If the user with the given ID is found
+        if (userIndex !== -1) {
+            // Use splice() to delete the user data from 'data' array
+            const userData = data.splice(userIndex, 1);
+
+            // Return a success response indicating user deletion
+            return res.status(204).json({
+                meta: { msg: "User deleted", status: true },
+                data: userData
+            });
+        } else {
+            // If the user with the given ID is not found, return a 404 status
+            return res.status(404).json({
+                meta: { msg: "User not found", status: false }
+            });
+        }
+
+    } catch (error) {
+        // Handle any unexpected errors and return a 500 status with an error message
+        return res.status(500).json({
+            meta: { msg: "Something went wrong.", status: false },
+            data: error.message
+        });
+    }
+}
+
 
 // Export the createUser function to use it elsewhere in the application
 module.exports = {
     createUser,
     getAllUser,
     getUserDetails,
-    updateUserDetails
+    updateUserDetails,
+    deleteUserDetails
 };
