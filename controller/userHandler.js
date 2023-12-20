@@ -107,11 +107,70 @@ const getUserDetails = async (req, res) => {
     }
 }
 
+// Function to update user details by ID
+const updateUserDetails = async (req, res) => {
+    try {
+        // Extract userId from request parameters
+        const { userId } = req.params;
+
+        // Check if userId is not a number
+        if (isNaN(userId)) {
+            return res.status(400).json({
+                meta: { msg: "Invalid userId", status: false },
+            });
+        }
+
+        // Find the index of the user in 'data' array based on the ID
+        const userIndex = data.findIndex(obj => obj.id === Number(userId));
+
+        // If the user with the given ID is found
+        if (userIndex !== -1) {
+            // Destructure username, age, and hobbies from request body
+            const { username, age, hobbies } = req.body;
+
+            // Create an updated object with the provided data
+            const updatedObj = {
+                id: Number(userId),
+                username,
+                age,
+                hobbies
+            };
+
+            // Remove keys with undefined or null values from the updated object
+            Object.keys(updatedObj).forEach((key) => {
+                if (!updatedObj[key]) {
+                    delete updatedObj[key];
+                }
+            });
+
+            // Update the user's data in the 'data' array
+            data[userIndex] = { ...data[userIndex], ...updatedObj };
+
+            // Return a success response with the updated user data
+            return res.status(200).json({
+                meta: { msg: "User's data updated", status: true },
+                data: updatedObj
+            });
+        } else {
+            // If the user with the given ID is not found, return a 404 status
+            return res.status(404).json({
+                meta: { msg: "User not found", status: false }
+            });
+        }
+    } catch (error) {
+        // Handle any unexpected errors and return a 500 status with an error message
+        return res.status(500).json({
+            meta: { msg: "Something went wrong.", status: false },
+            data: error.message
+        });
+    }
+}
 
 
 // Export the createUser function to use it elsewhere in the application
 module.exports = {
     createUser,
     getAllUser,
-    getUserDetails
+    getUserDetails,
+    updateUserDetails
 };
