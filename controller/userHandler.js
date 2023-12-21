@@ -14,6 +14,22 @@ const createUser = async (req, res) => {
             });
         };
 
+        if (typeof username !== 'string') {
+            return res.status(400).json({
+                meta: { msg: "Username will be a string", status: false }
+            });   
+        }
+        if (typeof age !== 'number') {
+            return res.status(400).json({
+                meta: { msg: "Age will be a string", status: false }
+            });   
+        }
+        if (!Array.isArray(hobbies)) {
+            return res.status(400).json({
+                meta: { msg: "Hobbies will be a array", status: false }
+            });   
+        }
+
         // Generate a unique ID for the new user based on the array length
         const id = data.length + 1;
 
