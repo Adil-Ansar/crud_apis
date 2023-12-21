@@ -66,7 +66,8 @@ const getAllUser = async (req, res) => {
         if (!data.length) {
             // If 'data' is empty, return a success response indicating no users found
             return res.status(200).json({
-                meta: { msg: "Users not found", status: false }
+                meta: { msg: "Users not found", status: false },
+                data
             });
         } else {
             // If 'data' has user records, return all user data with a success status
